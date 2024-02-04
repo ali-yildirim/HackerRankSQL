@@ -1,0 +1,13 @@
+with table1 as (
+select 
+    h.hacker_id id, 
+    h.name name,
+    count(c.challenge_id) num_challenges,
+    count(h.name) over (partition by count(c.challenge_id)) num_of_same_sts
+from challenges c
+inner join hackers h on h.hacker_id = c.hacker_id 
+group by h.hacker_id, h.name)
+select id, name, num_challenges from table1
+where num_of_same_sts <= 1
+or num_challenges >= (select max(num_challenges) from table1)
+order by num_challenges desc, id;
