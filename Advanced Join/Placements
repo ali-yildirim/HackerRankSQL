@@ -1,0 +1,8 @@
+with table1 as (
+select name, salary, friend_id from students s
+inner join friends f on f.id = s.id
+inner join packages p on p.id = s.id)
+select name from table1 t
+inner join packages p on p.id = t.friend_id
+where t.salary > p.salary
+order by p.salary;
