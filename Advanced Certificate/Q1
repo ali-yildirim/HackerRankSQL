@@ -1,0 +1,37 @@
+SET NULL "NULL";
+SET FEEDBACK OFF;
+SET ECHO OFF;
+SET HEADING OFF;
+SET WRAP OFF;
+SET LINESIZE 10000;
+SET TAB OFF;
+SET PAGES 0;
+SET DEFINE OFF;
+SET SERVEROUTPUT ON;
+
+/*
+Enter your query below.
+Please append a semicolon ";" at the end of the query
+*/
+
+
+
+with table1 as (
+    select ltrim(substr(record_date, 6, 2), 0) as rec_date,
+        data_type,
+        data_value 
+    from 
+        temperature_records
+),
+average_list as (
+    select * from table1 where data_type = 'avg'   
+)
+select A.rec_date, max(A.data_value), min(A.data_value), ROUND(AVG(B.data_value))  from table1 A, average_list B
+where A.rec_date = B.rec_date
+group by A.rec_date;
+
+
+
+
+exit;
+
