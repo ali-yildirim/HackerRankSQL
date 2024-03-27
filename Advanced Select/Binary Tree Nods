@@ -1,0 +1,14 @@
+with root as (
+select case when P is null then N end as Root from BST),
+inners as (
+select P from BST
+    minus
+select * from root
+)
+select 
+    case 
+        when N in (select * from inners) then N || ' Inner'
+        when N in (select * from root) then N || ' Root'
+        else N || ' Leaf' end as node_desc
+from BST
+order by N;
