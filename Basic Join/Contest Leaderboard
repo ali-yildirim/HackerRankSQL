@@ -1,0 +1,22 @@
+/*
+Enter your query here.
+Please append a semicolon ";" at the end of the query and enter your query in a single line to avoid error.
+*/
+
+with new_table as(
+select hacker_id, challenge_id, max(score) maxscore from submissions
+group by challenge_id, hacker_id)
+select nt.hacker_id, h.name, sum(nt.maxscore)
+from new_table nt
+join hackers h on h.hacker_id = nt.hacker_id
+having sum(nt.maxscore) <> 0
+group by nt.hacker_id, h.name
+order by sum(nt.maxscore) desc, nt.hacker_id asc;
+
+exit;
+
+
+
+
+
+
