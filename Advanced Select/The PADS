@@ -1,0 +1,12 @@
+
+with table1 as (
+select name || '(' || substr(occupation, 0, 1) || ')' as "occupation summary" from occupations 
+order by name asc
+), table2 as (
+select 'There are a total of ' || count(occupation) || ' ' || lower(occupation) || 's.' 
+from occupations
+group by occupation
+order by count(occupation) asc, occupation asc)
+select * from table1
+union
+select * from table2
