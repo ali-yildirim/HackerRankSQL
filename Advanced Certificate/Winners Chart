@@ -1,0 +1,25 @@
+
+with table1 as (
+select event_id, participant_name, max(score) score from scoretable
+group by event_id, participant_name
+order by event_id),
+table2 as (
+    select distinct score, event_id, participant_name from table1
+),
+table3 as(
+select 
+    row_number() over (partition by event_id order by score desc) ranks,
+    event_id, score from table2
+)
+select t1.event_id, t3.ranks, t1.participant_name from table1 t1, table3 t3
+where t1.event_id = t3.event_id and t1.score = t3.score 
+and t3.ranks in (1, 2, 3)
+order by event_id, t3.ranks;
+
+
+
+
+
+
+
+exit;
