@@ -12,7 +12,7 @@ SET SERVEROUTPUT ON;
 
 with table1 as (
 select 
-    c.name name,
+    c.algorithm algorithm,
     t.volume volume,
     case
         when TO_DATE(t.dt, 'YYYY-MM-DD HH24:MI:SS') between to_date('2020-01-01', 'YYYY-MM-DD') AND to_date('2020-03-31', 'YYYY-MM-DD') THEN 1 
@@ -22,9 +22,19 @@ select
   from 
     coins c, transactions t
 where c.code = t.coin_code)
-select name, 
-    case when Quarter = 1 then sum(volume) end from table1
-group by name;
+SELECT 
+    algorithm,
+    ROUND(SUM(CASE WHEN Quarter = 1 THEN volume ELSE 0 END), 6) AS Q1,
+    ROUND(SUM(CASE WHEN Quarter = 2 THEN volume ELSE 0 END), 6) AS Q2,
+    ROUND(SUM(CASE WHEN Quarter = 3 THEN volume ELSE 0 END), 6) AS Q3,
+    ROUND(SUM(CASE WHEN Quarter = 4 THEN volume ELSE 0 END), 6) AS Q4
+FROM 
+    table1
+GROUP BY 
+    algorithm
+ORDER BY 
+    algorithm ASC;
+
 
 
 
